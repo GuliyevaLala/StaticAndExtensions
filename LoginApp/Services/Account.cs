@@ -1,40 +1,38 @@
 ﻿using Services.Helpers;
+using Services.Helpers.Constants;
 using System;
 
 namespace Services {
     public class Account : IAccount{
-        public void CheckLogin(int role,string username, string passcode)
+        public string CheckLogin(int role, string email, string password)
         {
-            if (username == "test@code.edu.az" && passcode == "test12345")
+            if (email == AccountConstant.Email && password == AccountConstant.Password)
             {
-                CheckRoles(role);
+                if (CheckRoles(role))
+                {
+                    return AccountConstant.Success;
+                }
+                else
+                {
+                    return AccountConstant.NoAuthorize;
+                }
             }
             else
             {
-                if (username != "test@code.edu.az" || passcode != "test12345")
-                {
-                    Console.WriteLine("Oops something went wrong. Please double check your email or password ");
-                }
+                return AccountConstant.Failed;
             }
         }
 
-        public void CheckRoles(int role)
+        public bool CheckRoles(int role)
         {
-            switch (role)
+            if (role == (int)Roles.SuperAdmin)
             {
-                case (int)Roles.SuperAdmin:
-                    Console.WriteLine("Your Status is SuperAdmin and You are Successfully login in");
-                    break;
-                case (int)Roles.Admin:
-                    Console.WriteLine("Your Status is Admin, Access DENIED");
-                    break;
-                case (int)Roles.Member:
-                    Console.WriteLine("Your Status is Member, Access DENIED ");
-                    break;
-                default:
-                    Console.WriteLine("You HAVE NOT access to login this website") ;
-                    break;
+                return true;
+
             }
+
+            return false;
         }
+        
     }
 }
